@@ -3,6 +3,7 @@ using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -22,6 +23,11 @@ namespace MauiAppTempoAgora.Services
             using (HttpClient client = new HttpClient())
             {
                 HttpResponseMessage resp = await client.GetAsync(url);
+
+                if (resp.StatusCode == HttpStatusCode.NotFound)
+                {
+                    return null;
+                }
 
                 if (resp.IsSuccessStatusCode)
                 {
@@ -45,11 +51,11 @@ namespace MauiAppTempoAgora.Services
                         visibility = (int)rascunho["visibility"],
                         sunrise = sunrise.ToString(),
                         sunset = sunset.ToString(),
-                    }; // Fecha obj do Tempo.
-                } // Fecha if se o status do servidor foi de sucesso
-            } // fecha laço using
+                    };
+                }
+            }
 
             return t;
-           }
         }
+    }
 }
